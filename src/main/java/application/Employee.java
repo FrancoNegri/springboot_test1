@@ -1,12 +1,16 @@
 package application;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Employee {
@@ -15,14 +19,35 @@ public class Employee {
 	private String name;
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Role role;
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = Role.class)
+	private List<Role> roleHistory;
+	@ElementCollection
+	private Map<String, String> metadata;
 
 	Employee() {
 	}
 
-	public Employee(String name, Role role) {
-
+	public Employee(String name, Role role, List<Role> roleHistory, Map<String, String> metadata) {
 		this.name = name;
 		this.role = role;
+		this.roleHistory = roleHistory;
+		this.metadata = metadata;
+	}
+
+	public Map<String, String> getMetadata() {
+		return metadata;
+	}
+
+	public void setMetadata(Map<String, String> metadata) {
+		this.metadata = metadata;
+	}
+
+	public List<Role> getRoleHistory() {
+		return roleHistory;
+	}
+
+	public void setRoleHistory(List<Role> roleHistory) {
+		this.roleHistory = roleHistory;
 	}
 
 	public Long getId() {
@@ -69,6 +94,7 @@ public class Employee {
 
 	@Override
 	public String toString() {
-		return "Employee{" + "id=" + id + ", name='" + name + '\'' + ", role='" + role + '\'' + '}';
+		return "Employee [id=" + id + ", name=" + name + ", role=" + role + ", roleHistory=" + roleHistory + ", metadata=" + metadata + "]";
 	}
+
 }
